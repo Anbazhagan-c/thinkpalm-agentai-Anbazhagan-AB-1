@@ -1,1 +1,45 @@
+import re
 
+# 🛠️ Tool
+def calculator(expression):
+    try:
+        return eval(expression)
+    except:
+        return "Error"
+
+
+# 🧠 Mock ReAct agent (no API needed)
+def react_agent(query):
+    return f"""
+Question: {query}
+Thought: This looks like a math problem
+Action: calculator
+Action Input: 10+5
+"""
+
+
+# 🔄 Your function (slightly improved)
+def run_agent(query):
+    print("Question:", query)
+
+    response = react_agent(query)
+    print("\nAgent Output:\n", response)
+
+    # Extract Action Input
+    match = re.search(r"Action Input: (.*)", response)
+    
+    if match:
+        tool_input = match.group(1).strip()
+        result = calculator(tool_input)
+
+        print("\nObservation:", result)
+
+        final_answer = f"The answer is {result}"
+        print("\nFinal Answer:", final_answer)
+
+    else:
+        print("\nFinal Answer:", response)
+
+
+# ▶️ Run
+run_agent("What is 10 + 5?")
